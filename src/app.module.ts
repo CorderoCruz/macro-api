@@ -8,6 +8,7 @@ import { AuthModule } from "./auth/auth.module";
 import { EntryModule } from "./entry/entry.module";
 import { MacroModule } from "./macro/macro.module";
 import { UserModule } from "./user/user.module";
+import { AppController } from "./app.controller";
 
 @Module({
   imports: [
@@ -26,6 +27,6 @@ import { UserModule } from "./user/user.module";
     AuthModule,
     UserModule,
   ],
-  controllers: [],
+  controllers: [AppController],
 })
 export class AppModule {}
