@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { Macros } from "src/schemas/macros.schema";
 import { MacroService } from "./macro.service";
 
@@ -6,8 +6,8 @@ import { MacroService } from "./macro.service";
 export class MacroController {
   constructor(private macroService: MacroService) {}
 
-  @Get(":date")
-  async getMacrosByDate(@Param("date") date: string) {
+  @Get("/date")
+  async getMacrosByDate(@Query("date") date: string) {
     return this.macroService.getMacrosByDate(date);
   }
 

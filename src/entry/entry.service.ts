@@ -12,11 +12,10 @@ export class EntryService {
     return entries;
   }
 
-  async createEntry(entry: Entry): Promise<Entry> {
+  async createEntry(entry: Entry): Promise<any> {
     try {
-      if (entry.servingMeasurement === "one" && !entry.servingSize) throw Error("Serving size must have a valid value");
       const entryRes = await this.entryModel.create(entry);
-      return entryRes;
+      return { status: 200, data: { entryRes }, message: "Entry successfully created" };
     } catch (err) {
       return err;
     }
@@ -27,7 +26,8 @@ export class EntryService {
       const entryExists = await this.entryModel.findOne({ name: name });
       if (!entryExists) throw new Error("Entry does not exist");
 
-      await this.entryModel.findOneAndDelete({ name: name });
+      await this.entryModel.findOneAndRemove({ name: name });
+
       return { status: 200, message: "Successfully deleted entry" };
     } catch (err) {
       return err;

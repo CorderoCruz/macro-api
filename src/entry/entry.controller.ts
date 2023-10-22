@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post } from "@nestjs/common";
 import { EntryService } from "./entry.service";
 import { Entry } from "src/schemas/entry.schema";
 
@@ -13,12 +13,11 @@ export class EntryController {
 
   @Post("create")
   async createEntry(@Body() entry: Entry): Promise<Entry> {
-    console.log(entry);
     return this.entryService.createEntry(entry);
   }
 
-  @Delete(":name")
-  async deleteEntry(@Param("name") name: string) {
+  @Delete("delete")
+  async deleteEntry(@Body("name") name: string) {
     return this.entryService.deleteEntry(name);
   }
 }

@@ -38,16 +38,14 @@ export class MacroService {
     try {
       const existingMacros = await this.macrosModel.findOne({ date: macros.date });
 
-      if (!existingMacros) {
-        return this.createMacros(macros);
-      }
+      if (!existingMacros) return this.createMacros(macros);
 
       const { fat, carbs, protein, calories }: Macros = existingMacros;
 
-      const newCalories: number = calories + existingMacros.calories;
-      const newFat: number = fat + existingMacros.fat;
-      const newCarbs: number = carbs + existingMacros.carbs;
-      const newProtein: number = protein + existingMacros.protein;
+      const newCalories: number = calories + macros.calories;
+      const newFat: number = fat + macros.fat;
+      const newCarbs: number = carbs + macros.carbs;
+      const newProtein: number = protein + macros.protein;
 
       const newDoc = await this.macrosModel.findOneAndUpdate(
         { date: macros.date },
@@ -59,6 +57,7 @@ export class MacroService {
         },
         { new: true }
       );
+
       return { status: 200, data: newDoc, message: "Successfully updated macros" };
     } catch (err) {
       return err;
