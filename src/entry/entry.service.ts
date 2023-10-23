@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
+import { error } from "console";
 import mongoose from "mongoose";
 import { Entry } from "src/schemas/entry.schema";
 
@@ -14,10 +15,14 @@ export class EntryService {
 
   async createEntry(entry: Entry): Promise<any> {
     try {
+      const existingEntry = await this.entryModel.findOne({ name: entry.name });
+
+      if (existingEntry) return { status: 409, message: "Entry with that name already exists" };
+
       const entryRes = await this.entryModel.create(entry);
       return { status: 200, data: { entryRes }, message: "Entry successfully created" };
     } catch (err) {
-      return err;
+      return { status: err.status, message: err.message || "Was not able to create entry" };
     }
   }
 
@@ -27,7 +32,7 @@ export class EntryService {
 
       if (!existingEntry) return { status: 404, message: "No entry found" };
 
-      const { name, calories, fat, carbs, protein, servingMeasurement, servingSize } = existingEntry;
+      const { name, calories, fat, carbs, protein, servingMeasurement, servingSize } = entry;
 
       const newEntry = await this.entryModel.findOneAndUpdate(
         { name: existingEntry.name },
@@ -37,8 +42,7 @@ export class EntryService {
 
       return { status: 200, data: newEntry, message: "Successfully updated entry" };
     } catch (err) {
-      console.log(err);
-      return { message: "Entry could not be updated at this time" };
+      return { status: err.status, message: "Entry could not be updated at this time" };
     }
   }
 
@@ -51,7 +55,7 @@ export class EntryService {
 
       return { status: 200, message: "Successfully deleted entry" };
     } catch (err) {
-      return err;
+      return { status: err.status, message: err.message || "Was not able to delete entry" };
     }
   }
 }
