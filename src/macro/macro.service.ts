@@ -16,6 +16,7 @@ export class MacroService {
       if (!macros) return;
       return { status: 200, data: macros, message: "Successfully found macros" };
     } catch (err: any) {
+      console.error(JSON.stringify(err));
       return { status: err.status, message: err.message };
     }
   }
@@ -26,10 +27,11 @@ export class MacroService {
 
       if (macrosExist) throw Error("Macros already exist");
 
-      await this.macrosModel.create(macros);
+      const newMacros = await this.macrosModel.create(macros);
 
-      return { status: 200, message: "Successfully created macros" };
+      return { status: 200, message: "Successfully created macros", data: newMacros };
     } catch (err: any) {
+      console.error(JSON.stringify(err));
       return { message: err.message, status: err.status };
     }
   }
@@ -60,7 +62,8 @@ export class MacroService {
 
       return { status: 200, data: newDoc, message: "Successfully updated macros" };
     } catch (err) {
-      return err;
+      console.error(JSON.stringify(err));
+      return { message: err.message, status: err.status };
     }
   }
 }
