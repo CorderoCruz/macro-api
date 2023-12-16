@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { error } from "console";
 import mongoose from "mongoose";
 import { Entry } from "src/schemas/entry.schema";
 

@@ -9,12 +9,14 @@ import { EntryModule } from "./entry/entry.module";
 import { MacroModule } from "./macro/macro.module";
 import { UserModule } from "./user/user.module";
 import { AppController } from "./app.controller";
+import { WeightModule } from "./weight/weight.module";
 
 @Module({
   imports: [
     UserModule,
     MacroModule,
     EntryModule,
+    WeightModule,
     ConfigModule.forRoot({
       envFilePath: ".env",
       isGlobal: true,
