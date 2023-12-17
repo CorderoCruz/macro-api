@@ -1,17 +1,23 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Headers, Post, Put } from "@nestjs/common";
 import { WeightService } from "./weight.service";
 
 @Controller("api/v1/weight")
 export class WeightController {
   constructor(private weightService: WeightService) {}
   @Get()
-  public getWeight() {
-    return this.weightService.getWeight();
+  public getWeight(@Headers() headers) {
+    return this.weightService.getWeight(headers.limit);
   }
 
   @Post()
   public addWeight(@Body() weigthInfo) {
     const { date, weight } = weigthInfo;
     return this.weightService.addWeight(date, weight);
+  }
+
+  @Put()
+  public editWeight(@Body() weightInfo) {
+    const { date, weight } = weightInfo;
+    return this.weightService.updateWeight(date, weight);
   }
 }

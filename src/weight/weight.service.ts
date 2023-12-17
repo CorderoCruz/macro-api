@@ -7,8 +7,8 @@ import { Weight } from "src/schemas/weight.schema";
 export class WeightService {
   constructor(@InjectModel(Weight.name) private weightModel: Model<Weight>) {}
 
-  public async getWeight() {
-    const entries = await this.weightModel.find();
+  public async getWeight(limit: string) {
+    const entries = await this.weightModel.find().limit(+limit);
     return entries;
   }
 
@@ -17,6 +17,16 @@ export class WeightService {
       const weightRes = await this.weightModel.create({ date, weight });
 
       return { status: 200, data: { weight: weightRes.weight, date: weightRes.date }, message: "Weight successfully created" };
+    } catch (err) {
+      return { status: err.status, message: err.message || "Was not able to create entry" };
+    }
+  }
+
+  public async updateWeight(date: string, weight: string) {
+    try {
+      const weightFind = await this.weightModel.findOneAndUpdate({ date: date }, { date: date, weight: weight }, { new: true });
+
+      return { status: 200, data: { weight: weightFind.weight, date: weightFind.date }, message: "Weight was updated" };
     } catch (err) {
       return { status: err.status, message: err.message || "Was not able to create entry" };
     }
