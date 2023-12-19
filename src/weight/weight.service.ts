@@ -8,7 +8,7 @@ export class WeightService {
   constructor(@InjectModel(Weight.name) private weightModel: Model<Weight>) {}
 
   public async getWeight(limit: string) {
-    const entries = await this.weightModel.find().limit(+limit);
+    const entries = await this.weightModel.find().sort({ _id: -1 }).limit(+limit);
     return entries;
   }
 
