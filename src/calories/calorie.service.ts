@@ -8,7 +8,11 @@ export class CalorieService {
   constructor(@InjectModel(Calorie.name) private calorieModel: Model<Calorie>) {}
 
   async getMacrosForWeek(weekNumber: number) {
-    const latestWeek = await this.calorieModel.findOne({}, {}, { sort: { created_at: -1 } });
+    let latestWeek;
+    if (weekNumber) {
+      latestWeek = await this.calorieModel.findOne({ weekNumber: weekNumber });
+    }
+    latestWeek = await this.calorieModel.findOne({}, {}, { sort: { created_at: -1 } });
 
     if (!latestWeek) return { status: 404, error: "Have yet to start a week", message: "Have yet to start a week" };
     return latestWeek;

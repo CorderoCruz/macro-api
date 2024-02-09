@@ -4,7 +4,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
   timestamps: true,
 })
 export class Calorie {
-  @Prop()
+  @Prop({ unique: true })
   weekNumber: number;
 
   @Prop()
@@ -13,7 +13,7 @@ export class Calorie {
   @Prop()
   caloriesLeft: number;
 
-  @Prop()
+  @Prop({ unique: true })
   weekStartDate: string;
 }
 
