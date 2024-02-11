@@ -15,6 +15,9 @@ export class Calorie {
 
   @Prop({ unique: true })
   weekStartDate: string;
+
+  @Prop()
+  nextWeek: boolean;
 }
 
-export const CalorieSchema = SchemaFactory.createForClass(Calorie);
+export const CalorieSchema = SchemaFactory.createForClass<Calorie>(Calorie);
