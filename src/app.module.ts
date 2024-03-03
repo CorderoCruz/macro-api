@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
+import { WeightModule } from "./weight/weight.module";
 
 @Module({
   imports: [
@@ -8,6 +9,7 @@ import { MongooseModule } from "@nestjs/mongoose";
       envFilePath: ".env",
       isGlobal: true,
     }),
+    WeightModule,
     MongooseModule.forRoot(process.env.MONGODB_URI),
   ],
 })
