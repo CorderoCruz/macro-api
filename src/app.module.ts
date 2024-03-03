@@ -5,12 +5,12 @@ import { WeightModule } from "./weight/weight.module";
 import { AppController } from "./app.controller";
 
 @Module({
+  providers: [AppController],
   imports: [
     ConfigModule.forRoot({
       envFilePath: ".env",
       isGlobal: true,
     }),
-    AppController,
     WeightModule,
     MongooseModule.forRoot(process.env.MONGODB_URI),
   ],
