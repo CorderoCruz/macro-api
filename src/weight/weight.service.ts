@@ -12,11 +12,11 @@ export class WeightService {
     return entries;
   }
 
-  public async addWeight(date: string, weight: string) {
+  public async addWeight(date: string, lbs: number) {
     try {
-      const weightRes = await this.weightModel.create({ date, weight });
+      const weightRes = await this.weightModel.create({ date, lbs });
 
-      return { status: 200, data: { weight: weightRes.weight, date: weightRes.date }, message: "Weight successfully created" };
+      return { status: 200, data: { lbs: weightRes.lbs, date: weightRes.date }, message: "Weight successfully created" };
     } catch (err) {
       return { status: err.status, message: err.message || "Was not able to create entry" };
     }
@@ -26,7 +26,7 @@ export class WeightService {
     try {
       const weightFind = await this.weightModel.findOneAndUpdate({ date: date }, { date: date, weight: weight }, { new: true });
 
-      return { status: 200, data: { weight: weightFind.weight, date: weightFind.date }, message: "Weight was updated" };
+      return { status: 200, data: { lbs: weightFind.lbs, date: weightFind.date }, message: "Weight was updated" };
     } catch (err) {
       return { status: err.status, message: err.message || "Was not able to create entry" };
     }
