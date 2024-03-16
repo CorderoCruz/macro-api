@@ -8,7 +8,7 @@ export class Weight {
   date: string;
 
   @Prop()
-  weight: number;
+  lbs: number;
 }
 
 export const WeightSchema = SchemaFactory.createForClass(Weight);
