@@ -14,6 +14,7 @@ export class WeightService {
 
   public async addWeight(date: string, lbs: number) {
     try {
+      console.log("SERVICE", JSON.stringify({ date, lbs }, undefined, 2));
       const weightRes = await this.weightModel.create({ date, lbs });
 
       console.log(weightRes.date, weightRes.lbs);
