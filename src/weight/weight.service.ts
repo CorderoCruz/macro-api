@@ -16,6 +16,8 @@ export class WeightService {
     try {
       const weightRes = await this.weightModel.create({ date, lbs });
 
+      console.log(weightRes.date, weightRes.lbs);
+
       return { status: 200, data: { lbs: weightRes.lbs, date: weightRes.date }, message: "Weight successfully created" };
     } catch (err) {
       return { status: err.status, message: err.message || "Was not able to create entry" };
