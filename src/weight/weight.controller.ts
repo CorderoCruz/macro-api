@@ -12,7 +12,6 @@ export class WeightController {
   @Post()
   public addWeight(@Body() weigthInfo) {
     const { date, lbs } = weigthInfo;
-    console.log("Controller", JSON.stringify({ date, lbs }, undefined, 2));
     return this.weightService.addWeight(date, lbs);
   }
 

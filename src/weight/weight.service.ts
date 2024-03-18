@@ -14,10 +14,7 @@ export class WeightService {
 
   public async addWeight(date: string, lbs: number) {
     try {
-      console.log("SERVICE", JSON.stringify({ date, lbs }, undefined, 2));
       const weightRes = await this.weightModel.create({ date, lbs });
-
-      console.log(weightRes.date, weightRes.lbs);
 
       return { status: 200, data: { lbs: weightRes.lbs, date: weightRes.date }, message: "Weight successfully created" };
     } catch (err) {
@@ -31,7 +28,16 @@ export class WeightService {
 
       return { status: 200, data: { lbs: weightFind.lbs, date: weightFind.date }, message: "Weight was updated" };
     } catch (err) {
-      return { status: err.status, message: err.message || "Was not able to create entry" };
+      return { status: err.status, message: err.message || "Was not able to update entry" };
+    }
+  }
+
+  public async deleteWeight(date: string) {
+    try {
+      const weightFind = await this.weightModel.findOneAndDelete({ date });
+      return { status: 200, data: { lbs: weightFind.lbs, date: weightFind.date }, message: "Weight has been deleted" };
+    } catch (err) {
+      return { status: err.status, message: err.message || "Was not able to delete entry" };
     }
   }
 }
