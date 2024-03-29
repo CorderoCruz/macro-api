@@ -40,10 +40,11 @@ export class WeightService {
   public async deleteWeight(date: string) {
     try {
       const weightFind = await this.weightModel.findOneAndDelete({ date });
-      throw new NotFoundException({ describe: "Weight not found" });
-      return { status: 200, data: { lbs: weightFind.lbs, date: weightFind.date }, message: "Weight has been deleted" };
+      throw new NotFoundException("Weight not found");
+      // return { status: 200, data: { lbs: weightFind.lbs, date: weightFind.date }, message: "Weight has been deleted" };
     } catch (err) {
-      return { status: err.status, message: err.message || "Was not able to delete entry" };
+      console.log(err);
+      return err;
     }
   }
 }
