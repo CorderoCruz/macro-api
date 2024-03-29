@@ -22,5 +22,12 @@ export class WeightController {
   }
 
   @Delete()
-  public deleteWeight(@Body() { date }: { date: string }) {}
+  public deleteWeight(@Body() { date }: { date: string }) {
+    try {
+      return this.weightService.deleteWeight(date);
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
+  }
 }
