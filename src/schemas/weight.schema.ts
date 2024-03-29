@@ -4,7 +4,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
   timestamps: true,
 })
 export class Weight {
-  @Prop()
+  @Prop({ unique: true })
   date: string;
 
   @Prop()
