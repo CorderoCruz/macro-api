@@ -14,6 +14,11 @@ export class WeightService {
 
   public async addWeight(date: string, lbs: number) {
     try {
+      const existingWeight = await this.weightModel.findOne({ date });
+      if (existingWeight) {
+        return { status: 400, message: "A weight already exist for this weight, please delete current one with this date and try submitting again." };
+      }
+
       const weightRes = await this.weightModel.create({ date, lbs });
 
       return { status: 200, data: { lbs: weightRes.lbs, date: weightRes.date }, message: "Weight successfully created" };
