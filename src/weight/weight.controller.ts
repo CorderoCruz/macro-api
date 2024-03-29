@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Headers, Post, Put } from "@nestjs/common";
 import { WeightService } from "./weight.service";
 
 @Controller("api/v1/weight")
@@ -20,4 +20,7 @@ export class WeightController {
     const { date, weight } = weightInfo;
     return this.weightService.updateWeight(date, weight);
   }
+
+  @Delete()
+  public deleteWeight(@Body() { date }: { date: string }) {}
 }
