@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Weight } from "src/schemas/weight.schema";
@@ -13,33 +13,26 @@ export class WeightService {
   }
 
   public async addWeight(date: string, lbs: number) {
-    try {
-      const existingWeight = await this.weightModel.findOne({ date });
-      if (existingWeight) {
-        return { status: 400, message: "A weight already exist for this weight, please delete current one with this date and try submitting again." };
-      }
-
-      const weightRes = await this.weightModel.create({ date, lbs });
-
-      return { status: 200, data: { lbs: weightRes.lbs, date: weightRes.date }, message: "Weight successfully created" };
-    } catch (err) {
-      return { status: err.status, message: err.message || "Was not able to create entry" };
+    const existingWeight = await this.weightModel.findOne({ date });
+    if (existingWeight) {
+      throw new ConflictException("Weight for this date already exists. Please delete existing weight and try again.");
     }
+
+    const weightRes = await this.weightModel.create({ date, lbs });
+    return { data: { lbs: weightRes.lbs, date: weightRes.date }, message: "Weight successfully created" };
   }
 
   public async updateWeight(date: string, weight: string) {
-    try {
-      const weightFind = await this.weightModel.findOneAndUpdate({ date: date }, { date: date, weight: weight }, { new: true });
+    const weightFind = await this.weightModel.findOneAndUpdate({ date: date }, { date: date, weight: weight }, { new: true });
 
-      return { status: 200, data: { lbs: weightFind.lbs, date: weightFind.date }, message: "Weight was updated" };
-    } catch (err) {
-      return { status: err.status, message: err.message || "Was not able to update entry" };
-    }
+    return { data: { lbs: weightFind.lbs, date: weightFind.date }, message: "Weight was updated" };
   }
 
   public async deleteWeight(date: string) {
     const weightFind = await this.weightModel.findOneAndDelete({ date });
-    throw new NotFoundException("Weight not found");
-    // return { status: 200, data: { lbs: weightFind.lbs, date: weightFind.date }, message: "Weight has been deleted" };
+    if (!weightFind) {
+      throw new NotFoundException("Weight not found");
+    }
+    return { status: 200, data: { lbs: weightFind.lbs, date: weightFind.date }, message: "Weight has been deleted" };
   }
 }
