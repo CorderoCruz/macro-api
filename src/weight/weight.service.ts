@@ -1,4 +1,4 @@
-import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Weight } from "src/schemas/weight.schema";
@@ -13,23 +13,38 @@ export class WeightService {
   }
 
   public async addWeight(date: string, lbs: number) {
+    if (!date || !lbs) {
+      throw new BadRequestException("Missing fields!");
+    }
+
     const existingWeight = await this.weightModel.findOne({ date });
+
     if (existingWeight) {
       throw new ConflictException("Weight for this date already exists. Please delete existing weight and try again.");
     }
 
     const weightRes = await this.weightModel.create({ date, lbs });
+
     return { data: { lbs: weightRes.lbs, date: weightRes.date }, message: "Weight successfully created" };
   }
 
   public async updateWeight(date: string, weight: string) {
+    if (!date || !weight) {
+      throw new BadRequestException("Missing fields!");
+    }
+
     const weightFind = await this.weightModel.findOneAndUpdate({ date: date }, { date: date, weight: weight }, { new: true });
 
     return { data: { lbs: weightFind.lbs, date: weightFind.date }, message: "Weight was updated" };
   }
 
   public async deleteWeight(date: string) {
+    if (!date) {
+      throw new BadRequestException("Could not delete weight at this moment.");
+    }
+
     const weightFind = await this.weightModel.findOneAndDelete({ date });
+
     if (!weightFind) {
       throw new NotFoundException("Weight not found");
     }
