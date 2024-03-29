@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Weight } from "src/schemas/weight.schema";
@@ -40,6 +40,7 @@ export class WeightService {
   public async deleteWeight(date: string) {
     try {
       const weightFind = await this.weightModel.findOneAndDelete({ date });
+      throw new NotFoundException({ describe: "Weight not found" });
       return { status: 200, data: { lbs: weightFind.lbs, date: weightFind.date }, message: "Weight has been deleted" };
     } catch (err) {
       return { status: err.status, message: err.message || "Was not able to delete entry" };
